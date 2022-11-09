@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 
 # src/dev to gitignore to not track files
-src/dev
 *.pptx
