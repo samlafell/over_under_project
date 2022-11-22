@@ -39,6 +39,13 @@ def second_team(first_team, game_info_df):
     team2 = [team_iter for team_iter in team_flat if team_iter != first_team]
     return team2[0]
 
+def identify_home_away_pitchers(full_game_df):
+    
+    away_pitcher = full_game_df.loc[(full_game_df['inning'] == 1) & (full_game_df['inning_topbot'] == 'Bot')].pitcher.unique().tolist()[0]
+    home_pitcher = full_game_df.loc[(full_game_df['inning'] == 1) & (full_game_df['inning_topbot'] == 'Top')].pitcher.unique().tolist()[0]
+
+    return home_pitcher, away_pitcher
+
 def pitcher_last4weeks(game_day, lookback_period, pitchers:list):
     # Define ranges
     first_day_range = (datetime.strptime(game_day, '%Y-%m-%d') - timedelta(days = lookback_period)).strftime('%Y-%m-%d')
@@ -79,13 +86,12 @@ second_team_df = gather_game_info(game_day, second_team)
 # Append the two dfs
 full_game_df = pd.concat([first_team_df, second_team_df])
 
-# Identify Pitchers
-away_pitcher = full_game_df.loc[(full_game_df['inning'] == 1) & (full_game_df['inning_topbot'] == 'Bot')].pitcher.unique().tolist()[0]
-home_pitcher = full_game_df.loc[(full_game_df['inning'] == 1) & (full_game_df['inning_topbot'] == 'Top')].pitcher.unique().tolist()[0]
+# * Step 5. Identify Pitchers
+home_pitcher, away_pitcher = identify_home_away_pitchers(full_game_df)
 
-# * Step 5. Identify Get all at bats for the pitchers the last x days
+# * Step 6. Identify Get all at bats for the pitchers the last x days
 pitchers_df = pitcher_last4weeks('2018-05-13', 28, [home_pitcher, away_pitcher])
 
-# * Step 6. Aggregate into one DF
+# * Step 7. Aggregate into one DF
 four_week_pitcher_aggregate = aggregate_pitcherpreformance(pitchers_df)
 four_week_pitcher_aggregate
