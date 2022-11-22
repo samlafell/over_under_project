@@ -90,7 +90,7 @@ full_game_df = pd.concat([first_team_df, second_team_df])
 home_pitcher, away_pitcher = identify_home_away_pitchers(full_game_df)
 
 # * Step 6. Identify Get all at bats for the pitchers the last x days
-pitchers_df = pitcher_last4weeks('2018-05-13', 28, [home_pitcher, away_pitcher])
+pitchers_df = pitcher_last4weeks(game_day, 28, [home_pitcher, away_pitcher])
 
 # * Step 7. Aggregate into one DF
 four_week_pitcher_aggregate = aggregate_pitcherpreformance(pitchers_df)
