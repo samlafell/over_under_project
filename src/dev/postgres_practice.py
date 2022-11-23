@@ -53,8 +53,9 @@ create_database(connection, 'test')
 drop_database(connection, 'test')
 
 # Test for table
-if table_exists(connection, 'atl_2017'):
-    col_names = get_table_col_names(connection, 'atl_2017')
+table_name = 'atl.batters_2017'
+if table_exists(connection, table_name):
+    col_names = get_table_col_names(connection, table_name)
     print(col_names)
 else:
     print('table does not exist')
