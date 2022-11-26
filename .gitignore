@@ -130,5 +130,4 @@ dmypy.json
 
 # src/dev to gitignore to not track files
 *.pptx
-src/dev/postgres_practice.py
-src/dev/sql_extra.py
+src/dev/untracked/*.py
