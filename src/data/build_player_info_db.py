@@ -23,7 +23,7 @@ except:
 # Add utils folder if not already in system path
 if str(base_path) not in sys.path:
     print('adding path')
-    sys.path.append(base_path)
+    sys.path.append(str(base_path))
 
 # Import SQL Functions
 from utils import sql_functions as sf
@@ -73,16 +73,28 @@ else:
                                 );""").format(sql.Identifier(schema),
                                               sql.Identifier(table))
                     )
-        
-        # * Insert Into Table
-        sf.insert_into(connection, schema, table, data)
-        
     except psycopg.Error as e:
         print(e)
+    
+    
+# * Insert Into Table
+# -------------------------------------------------------
+try:
+    sf.insert_into(connection, schema, table, data)
+except psycopg.Error as e:
+    print(e)
+        
 
 # * Load Table
 # -------------------------------------------------------
 schema, table = 'players', 'chadwick_register'
-cur.execute(f"SELECT * FROM {schema}.{table}")
-data_fromtable = cur.fetchall()
-data = pd.DataFrame(data_fromtable, columns = sf.get_table_col_names(connection, schema+'.'+table))
+try:
+    cur.execute(f"SELECT * FROM {schema}.{table}")
+    data_fromtable = cur.fetchall()
+    data = pd.DataFrame(data_fromtable, columns = sf.get_table_col_names(connection, schema+'.'+table))
+    print(f'successfully loaded {schema}.{table} with {data.shape[0]} rows')
+except psycopg.Error as e:
+    print(e)
+    
+# * Load Table
+# -------------------------------------------------------
